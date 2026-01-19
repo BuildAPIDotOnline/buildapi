@@ -1,6 +1,5 @@
 import Header from '@/components/header'
 import Hero from '@/components/hero'
-import Hero2 from '@/components/sections/Hero'
 import FeaturesShowcase from '@/components/features-showcase'
 import Companies from '@/components/companies'
 import FeaturesGrid from '@/components/features-grid'
