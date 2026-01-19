@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ArrowUpRight } from 'lucide-react'
 
@@ -39,13 +40,17 @@ export default function Header() {
 
         {/* CTA Buttons */}
         <div className="flex items-center gap-3">
-          <Button variant="ghost" className="text-sm">
-            Log in
-          </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-white gap-2 text-sm">
-            Start Building
-            <ArrowUpRight className="w-4 h-4" />
-          </Button>
+          <Link href="/login">
+            <Button variant="ghost" className="text-sm">
+              Log in
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button className="bg-primary hover:bg-primary/90 text-white gap-2 text-sm">
+              Start Building
+              <ArrowUpRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </nav>
     </header>

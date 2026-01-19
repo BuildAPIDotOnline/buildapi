@@ -25,9 +25,11 @@ export default function Header() {
           <Link href="/login" className="text-sm font-medium text-slate-600">
             Log in
           </Link>
-          <Button className="rounded-full bg-blue-600 px-6 hover:bg-blue-700">
-            Get Started
-          </Button>
+          <Link href="/signup">
+            <Button className="rounded-full bg-blue-600 px-6 hover:bg-blue-700">
+              Get Started
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

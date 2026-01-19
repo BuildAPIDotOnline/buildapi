@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Button } from "@/components/ui/button";
 
 export default function Hero() {
@@ -21,9 +22,11 @@ export default function Hero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button size="lg" className="rounded-full px-8 bg-blue-600 text-lg">
-            Start Building
-          </Button>
+          <Link href="/signup">
+            <Button size="lg" className="rounded-full px-8 bg-blue-600 text-lg">
+              Start Building
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="rounded-full px-8 text-lg">
             View Documentation
           </Button>

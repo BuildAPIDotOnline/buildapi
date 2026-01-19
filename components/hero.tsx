@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowUpRight } from 'lucide-react'
 
@@ -25,10 +26,12 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-          <Button className="bg-primary hover:bg-primary/90 text-white gap-2 h-12 text-base px-8">
-            Start Building
-            <ArrowUpRight className="w-4 h-4" />
-          </Button>
+          <Link href="/signup">
+            <Button className="bg-primary hover:bg-primary/90 text-white gap-2 h-12 text-base px-8">
+              Start Building
+              <ArrowUpRight className="w-4 h-4" />
+            </Button>
+          </Link>
           <Button variant="outline" className="h-12 text-base px-8 gap-2 bg-transparent">
             Talk to an expert
             <ArrowUpRight className="w-4 h-4" />

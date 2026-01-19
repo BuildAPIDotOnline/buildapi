@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { MoveUpRight } from 'lucide-react';
 
 export const CTAFinal = () => (
@@ -18,9 +19,11 @@ export const CTAFinal = () => (
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-6">
-        <button className="flex items-center gap-2 rounded-xl bg-[#2563EB] px-8 py-4 font-semibold text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
-          Start Building <MoveUpRight size={18} />
-        </button>
+        <Link href="/signup">
+          <button className="flex items-center gap-2 rounded-xl bg-[#2563EB] px-8 py-4 font-semibold text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+            Start Building <MoveUpRight size={18} />
+          </button>
+        </Link>
         <button className="flex items-center gap-2 font-semibold text-[#2563EB] hover:underline">
           Talk to an expert <MoveUpRight size={18} />
         </button>
