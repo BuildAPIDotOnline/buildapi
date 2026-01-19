@@ -2,6 +2,49 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Variables
+
+Create a `.env.local` file in the root directory with the following environment variables:
+
+```env
+# MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/buildapi
+# Or use MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/buildapi
+
+# JWT Secret (generate a random string for production)
+JWT_SECRET=your-secret-key-change-in-production
+JWT_EXPIRES_IN=7d
+
+# Paystack API Keys
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_your_public_key_here
+PAYSTACK_SECRET_KEY=sk_test_your_secret_key_here
+```
+
+**Important:**
+- `MONGODB_URI` - MongoDB connection string. Use local MongoDB or MongoDB Atlas
+- `JWT_SECRET` - Secret key for JWT token signing. Use a strong random string in production
+- `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` - Used in the frontend (public key - safe to expose)
+- `PAYSTACK_SECRET_KEY` - Used only in the backend API routes (secret key - never expose)
+- Use test keys (`pk_test_...` and `sk_test_...`) for development
+- Use live keys (`pk_live_...` and `sk_live_...`) for production
+- Get Paystack keys from [Paystack Dashboard](https://dashboard.paystack.com/#/settings/developer) under API Keys & Webhooks
+
+### Database Setup
+
+1. Make sure MongoDB is running locally, or have a MongoDB Atlas connection string ready.
+
+2. Seed the database with initial data (pricing plans and industries):
+
+```bash
+npm run seed
+```
+
+This will create:
+- Default pricing plans (Starter, Professional, Enterprise)
+- Default industries (Banking, CRM, E-commerce, CMS)
+
+### Running the Development Server
+
 First, run the development server:
 
 ```bash
