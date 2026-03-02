@@ -14,8 +14,8 @@ export default function Home() {
       <Header />
       <Hero />
      
-      <Companies />
-       <FeaturesShowcase />
+      {/* <Companies /> */}
+       {/* <FeaturesShowcase /> */}
       <FeaturesGrid />
       <Industry />
       <Testimonials />

@@ -136,7 +136,7 @@ async function seedUsers() {
   }
 
   // Hash passwords for test users
-  const passwordHash = await hashPassword('password123'); // All test users will have this password
+  const passwordHash = await hashPassword('bra'); // All test users will have this password
 
   const users = [
     {
@@ -153,6 +153,7 @@ async function seedUsers() {
       heardAboutUs: 'Search Engine',
       emailVerified: true,
       twoFactorEnabled: false,
+      accountStatus: 'approved',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -170,6 +171,7 @@ async function seedUsers() {
       heardAboutUs: 'Direct Referral',
       emailVerified: true,
       twoFactorEnabled: true,
+      accountStatus: 'approved',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -187,6 +189,7 @@ async function seedUsers() {
       heardAboutUs: 'Developer Community',
       emailVerified: true,
       twoFactorEnabled: false,
+      accountStatus: 'approved',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -195,9 +198,45 @@ async function seedUsers() {
   await usersCollection.insertMany(users);
   console.log('✅ Seeded test users');
   console.log('   Test credentials:');
-  console.log('   - Email: john.doe@example.com | Password: password123');
-  console.log('   - Email: jane.smith@example.com | Password: password123');
-  console.log('   - Email: alex.rivera@example.com | Password: password123');
+  console.log('   - Email: john.doe@example.com | Password: bra');
+  console.log('   - Email: jane.smith@example.com | Password: bra');
+  console.log('   - Email: alex.rivera@example.com | Password: bra');
+}
+
+async function migrateExistingUsersToApproved() {
+  const db = await getDb();
+  const usersCollection = db.collection('users');
+  const result = await usersCollection.updateMany(
+    { accountStatus: { $exists: false } },
+    {
+      $set: {
+        accountStatus: 'approved',
+        emailVerified: true,
+        updatedAt: new Date(),
+      },
+    }
+  );
+  if (result.modifiedCount > 0) {
+    console.log(`✅ Migrated ${result.modifiedCount} existing user(s) to approved status`);
+  }
+}
+
+async function setAdminUser() {
+  const db = await getDb();
+  const usersCollection = db.collection('users');
+  const adminEmail =
+    process.env.ADMIN_SEED_EMAIL?.trim().toLowerCase() || 'john.doe@example.com';
+  const result = await usersCollection.updateOne(
+    { email: adminEmail },
+    { $set: { isAdmin: true } }
+  );
+  if (result.matchedCount > 0) {
+    console.log(`✅ Set admin: ${adminEmail}`);
+  } else {
+    console.log(
+      `   No user found for admin email "${adminEmail}". Set ADMIN_SEED_EMAIL in .env.local or create a user and set isAdmin: true in the database.`
+    );
+  }
 }
 
 async function seed() {
@@ -206,6 +245,8 @@ async function seed() {
     await seedPricingPlans();
     await seedIndustries();
     await seedUsers();
+    await migrateExistingUsersToApproved();
+    await setAdminUser();
     console.log('✅ Database seed completed!');
     process.exit(0);
   } catch (error) {

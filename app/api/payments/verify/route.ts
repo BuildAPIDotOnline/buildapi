@@ -297,7 +297,7 @@ export async function POST(req: NextRequest) {
 
         const apiKey = {
           userId: new ObjectId(user.userId),
-          key: fullKey, // Save full unhashed key
+          key: fullKey, // Store full unhashed key - never store hashedKey
           keyPrefix: prefix,
           name: `${payment.appName} - ${payment.industry}`,
           industry: payment.industry,

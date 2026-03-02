@@ -77,7 +77,7 @@ export default function PurchasePage() {
   }, [selectedInvoice]);
 
   return (
-    <div className="space-y-10 relative pb-20">
+    <div className="space-y-6 md:space-y-10 relative pb-20 min-w-0">
       {/* Background Mesh */}
       <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none" 
            style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
@@ -85,12 +85,12 @@ export default function PurchasePage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 ">API Marketplace</h1>
-          <p className="text-slate-500 mt-2 font-medium">Provision new keys for Banking, CRM, E-commerce, or CMS.</p>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-slate-900">API Marketplace</h1>
+          <p className="text-sm md:text-base text-slate-500 mt-2 font-medium">Provision new keys for Banking, CRM, E-commerce, or CMS.</p>
         </div>
         <Button 
           onClick={() => setIsWizardOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white h-12 rounded-lg font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-200"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white h-12 rounded-lg font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-200"
         >
           <Plus size={20} /> Purchase New Key
         </Button>
@@ -110,7 +110,7 @@ export default function PurchasePage() {
 
       {/* Purchase Details Modal */}
       <Dialog open={selectedInvoice !== null} onOpenChange={(open) => !open && setSelectedInvoice(null)}>
-        <DialogContent className="max-w-xl h-auto max-h-[500px] overflow-hidden flex flex-col">
+        <DialogContent className="max-w-xl w-[calc(100%-2rem)] sm:w-full max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>
               {loadingPurchase ? 'Loading Purchase Details' : 
@@ -136,7 +136,7 @@ export default function PurchasePage() {
             </div>
           ) : selectedPurchase ? (
                       <>
-                          <div className="flex justify-between items-center gap-2 pr-8 -mt-4">
+                          <div className="flex justify-between items-center gap-2 pr-6 sm:pr-8 -mt-4">
                     <div className="flex items-center gap-2">
                     <CheckCircle2 className="text-emerald-600" size={20} />
                     <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -147,7 +147,7 @@ export default function PurchasePage() {
              
               
               <Tabs defaultValue="invoice" className="flex-1 flex flex-col overflow-hidden mt-2">
-                <TabsList className="flex w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-3 gap-1 p-1">
                   <TabsTrigger value="invoice">Invoice</TabsTrigger>
                   <TabsTrigger value="application">Application</TabsTrigger>
                   <TabsTrigger value="receipt">Receipt</TabsTrigger>
@@ -158,9 +158,9 @@ export default function PurchasePage() {
                  
 
                   {/* Invoice Information */}
-                  <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Invoice Information</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-slate-50 rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">Invoice Information</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Invoice ID</p>
                         <p className="text-sm font-bold text-slate-900">{selectedPurchase.id}</p>
@@ -183,8 +183,8 @@ export default function PurchasePage() {
 
                 <TabsContent value="application" className="flex-1 overflow-y-auto mt-4 space-y-4">
                   {/* Application Details */}
-                  <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Application Details</h3>
+                  <div className="bg-slate-50 rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">Application Details</h3>
                     <div className="space-y-4">
                       <div>
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Application Name</p>
@@ -217,8 +217,8 @@ export default function PurchasePage() {
 
                 <TabsContent value="receipt" className="flex-1 overflow-y-auto mt-4 space-y-4">
                   {/* Receipt Details */}
-                  <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Receipt Details</h3>
+                  <div className="bg-slate-50 rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">Receipt Details</h3>
                     <div className="space-y-4">
                       <div>
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Payment Method</p>

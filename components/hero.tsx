@@ -39,13 +39,13 @@ export default function Hero() {
         </div>
 </div>
 
-        <div className=" relative mx-auto w-full">
+        {/* <div className=" relative mx-auto w-full">
           <div className="rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
             <div className="rounded-xl border border-slate-100 bg-slate-50 overflow-hidden aspect-video flex items-center justify-center">
                <p className="text-slate-400 italic">[ Your Dashboard Screenshot / Video Here ]</p>
             </div>
           </div>
-        </div>
+        </div> */}
      
       </div>
     </section>

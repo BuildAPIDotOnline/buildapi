@@ -168,9 +168,9 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
   if (loading) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-12">
-        <div className="p-8 border-b border-slate-50">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-8 md:mt-12">
+        <div className="p-4 md:p-8 border-b border-slate-50">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
         </div>
         <div className="p-8 text-center text-slate-500">Loading...</div>
       </div>
@@ -179,9 +179,9 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
   if (error) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-12">
-        <div className="p-8 border-b border-slate-50">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-8 md:mt-12">
+        <div className="p-4 md:p-8 border-b border-slate-50">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
         </div>
         <div className="p-8 text-center text-red-500">{error}</div>
       </div>
@@ -190,9 +190,9 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
   if (purchaseHistory.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-12">
-        <div className="p-8 border-b border-slate-50">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-8 md:mt-12">
+        <div className="p-4 md:p-8 border-b border-slate-50">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
         </div>
         <div className="p-8 text-center text-slate-500">No purchase history found.</div>
       </div>
@@ -202,22 +202,22 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
   const hasActiveFilters = statusFilter !== 'all' || industryFilter !== 'all';
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-12">
-      <div className="p-8 border-b border-slate-50">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
+    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mt-8 md:mt-12">
+      <div className="p-4 md:p-8 border-b border-slate-50">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Purchase History</h2>
         </div>
         
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="text-slate-400" size={16} />
+            <Filter className="text-slate-400 shrink-0" size={16} />
             <span className="text-sm font-medium text-slate-600">Filters:</span>
           </div>
           
           {/* Status Filter */}
           <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full sm:w-[150px]">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
@@ -230,7 +230,7 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
           {/* Industry Filter */}
           <Select value={industryFilter} onValueChange={handleIndustryFilterChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="All Industries" />
             </SelectTrigger>
             <SelectContent>
@@ -258,7 +258,40 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile Card Layout */}
+      <div className="md:hidden p-4 space-y-3">
+        {purchaseHistory.map((item) => (
+          <div
+            key={item.id}
+            className="bg-slate-50/50 rounded-xl p-4 border border-slate-100 space-y-3"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <span className="text-sm font-medium text-slate-600">{item.date}</span>
+              {getStatusPill(item.status)}
+            </div>
+            <div>
+              <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                {item.industry}
+              </span>
+            </div>
+            <p className="text-lg font-bold text-slate-900">{item.amount}</p>
+            <p className="text-xs text-slate-500 font-mono truncate" title={item.invoiceId}>
+              {item.invoiceId}
+            </p>
+            <div className="flex justify-end gap-1 pt-1">
+              <button onClick={() => onViewDetails(item.id)} className="p-2 text-slate-400 hover:text-blue-600 transition rounded-lg hover:bg-blue-50">
+                <Eye size={18} />
+              </button>
+              <button className="p-2 text-slate-400 hover:text-slate-900 transition rounded-lg hover:bg-slate-100">
+                <Download size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left">
           <thead className="bg-slate-50/50">
             <tr>
@@ -300,9 +333,9 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
-        <div className="p-6 border-t border-slate-100">
+        <div className="p-4 md:p-6 border-t border-slate-100">
           <Pagination>
-            <PaginationContent>
+            <PaginationContent className="flex-wrap gap-2 justify-center">
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() => handlePageChange(page - 1)}
@@ -311,52 +344,38 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
                 />
               </PaginationItem>
 
-              {/* Page numbers */}
+              {/* Page numbers - hidden on mobile */}
               {(() => {
                 const pages: (number | 'ellipsis')[] = [];
                 const total = pagination.totalPages;
                 const current = page;
 
                 if (total <= 7) {
-                  // Show all pages if 7 or fewer
                   for (let i = 1; i <= total; i++) {
                     pages.push(i);
                   }
                 } else {
-                  // Always show first page
                   pages.push(1);
-
-                  if (current > 3) {
-                    pages.push('ellipsis');
-                  }
-
-                  // Show pages around current
+                  if (current > 3) pages.push('ellipsis');
                   const start = Math.max(2, current - 1);
                   const end = Math.min(total - 1, current + 1);
-
                   for (let i = start; i <= end; i++) {
                     pages.push(i);
                   }
-
-                  if (current < total - 2) {
-                    pages.push('ellipsis');
-                  }
-
-                  // Always show last page
+                  if (current < total - 2) pages.push('ellipsis');
                   pages.push(total);
                 }
 
                 return pages.map((item, index) => {
                   if (item === 'ellipsis') {
                     return (
-                      <PaginationItem key={`ellipsis-${index}`}>
+                      <PaginationItem key={`ellipsis-${index}`} className="hidden sm:list-item">
                         <PaginationEllipsis />
                       </PaginationItem>
                     );
                   }
-
                   return (
-                    <PaginationItem key={item}>
+                    <PaginationItem key={item} className="hidden sm:list-item">
                       <PaginationLink
                         onClick={() => handlePageChange(item)}
                         isActive={item === page}
@@ -381,7 +400,10 @@ export default function PurchaseHistory({ onViewDetails }: { onViewDetails: (id:
 
           {/* Pagination info */}
           <div className="mt-4 text-center text-sm text-slate-500">
-            Showing {((page - 1) * limit) + 1} to {Math.min(page * limit, pagination.totalCount)} of {pagination.totalCount} payments
+            <span className="sm:hidden">Page {page} of {pagination.totalPages}</span>
+            <span className="hidden sm:inline">
+              Showing {((page - 1) * limit) + 1} to {Math.min(page * limit, pagination.totalCount)} of {pagination.totalCount} payments
+            </span>
           </div>
         </div>
       )}

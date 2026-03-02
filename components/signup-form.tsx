@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { api, ApiClientError } from '@/lib/api-client'
-import { setToken } from '@/lib/auth-storage'
 import { useRouter } from 'next/navigation'
 import {
   Form,
@@ -27,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const signupSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -155,22 +155,17 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
       // Remove confirmPassword and acceptTerms before sending to API
       const { confirmPassword, acceptTerms, ...signupData } = data
       
-      const response = await api.post<{ success: boolean; token: string; user: any }>(
+      const response = await api.post<{ success: boolean; email: string }>(
         '/api/auth/signup',
         signupData
       )
 
-      if (response.success && response.token) {
-        setToken(response.token)
+      if (response.success && response.email) {
         toast({
-          title: 'Account created successfully',
-          description: 'Welcome to BuildAPI!',
+          title: 'Check your email',
+          description: 'We sent a verification code to your email address.',
         })
-        setInternalStep(3)
-        // Auto-redirect to dashboard after 3 seconds
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 3000)
+        router.push(`/verify-email?email=${encodeURIComponent(response.email)}`)
       }
     } catch (error) {
       console.error('Signup error:', error)
@@ -271,7 +266,7 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Country</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select your country" />
@@ -425,7 +420,7 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Company Size</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select company size" />
@@ -451,7 +446,7 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Industry</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value || undefined}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select your industry" />
@@ -476,7 +471,7 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>How did you hear about us?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value || undefined}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select source" />
@@ -491,6 +486,25 @@ export default function SignupForm({ setStep }: { setStep: (step: number) => voi
                     </SelectContent>
                   </Select>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="acceptTerms"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked === true)}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>I agree to the terms and conditions</FormLabel>
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />

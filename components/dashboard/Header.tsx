@@ -13,12 +13,14 @@ import {
 import { api } from '@/lib/api-client';
 import { removeToken } from '@/lib/auth-storage';
 import { useRouter } from 'next/navigation';
+import UserAvatar from '@/components/dashboard/UserAvatar';
 
 interface UserData {
   firstName: string;
   lastName: string;
   email: string;
   jobTitle?: string;
+  avatarUrl?: string | null;
 }
 
 export default function DashboardHeader() {
@@ -62,10 +64,13 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="h-20 border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-0 z-40 px-8 flex items-center justify-between">
-      {/* Left Section: Search Bar */}
+    <header className="h-20 border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 flex items-center justify-between gap-4">
+      {/* Left Section: Search Bar (desktop) / Logo (mobile) */}
       <div className="flex items-center w-full max-w-md">
-        <div className="relative w-full group">
+        <Link href="/dashboard" className="md:hidden text-xl font-bold tracking-tighter text-blue-600 shrink-0">
+          API<span className="text-slate-900">CORE</span>
+        </Link>
+        <div className="hidden md:block relative w-full group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <Search size={18} className="text-slate-400 group-focus-within:text-blue-600 transition-colors" />
           </div>
@@ -106,11 +111,13 @@ export default function DashboardHeader() {
                   <p className="text-sm font-bold text-slate-900 leading-none">{getFullName()}</p>
                   <p className="text-[10px] text-slate-400 mt-1 font-medium">{getAccountType()}</p>
                 </div>
-                <div className="relative h-10 w-10 rounded-lg border-2 border-white shadow-sm overflow-hidden bg-blue-100">
-                  <div className="flex items-center justify-center h-full w-full text-blue-600 font-bold text-sm">
-                    {getInitials()}
-                  </div>
-                </div>
+                <UserAvatar
+                  avatarUrl={user?.avatarUrl}
+                  firstName={user?.firstName}
+                  lastName={user?.lastName}
+                  size="md"
+                  className="h-10 w-10 rounded-lg border-2 border-white shadow-sm"
+                />
                 <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-900 transition-colors" />
               </button>
             </DropdownMenuTrigger>

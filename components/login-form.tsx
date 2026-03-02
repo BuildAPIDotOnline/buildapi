@@ -65,11 +65,18 @@ export default function LoginForm() {
           ? error.message
           : 'Failed to login. Please check your credentials.'
       
+      const isEmailNotVerified =
+        error instanceof ApiClientError && error.status === 403
+
       toast({
-        title: 'Login failed',
+        title: isEmailNotVerified ? 'Email verification required' : 'Login failed',
         description: errorMessage,
         variant: 'destructive',
       })
+
+      if (isEmailNotVerified && data.email) {
+        router.push(`/verify-email?email=${encodeURIComponent(data.email)}`)
+      }
     } finally {
       setIsLoading(false)
     }

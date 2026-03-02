@@ -18,6 +18,18 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt?: Date;
+  avatarUrl?: string;
+  isAdmin?: boolean;
+  accountStatus?: 'pending_verification' | 'pending_approval' | 'approved';
+}
+
+export interface EmailVerificationOtp {
+  _id?: ObjectId;
+  email: string;
+  otp: string;
+  userId: ObjectId;
+  expiresAt: Date;
+  createdAt: Date;
 }
 
 export interface PricingPlan {

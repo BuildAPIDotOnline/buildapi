@@ -53,7 +53,7 @@ export async function PUT(
       { _id: new ObjectId(id) },
       {
         $set: {
-          key: fullKey, // Save full unhashed key
+          key: fullKey, // Store full unhashed key - never store hashedKey
           keyPrefix: prefix,
           lastRotatedAt: new Date(),
         },

@@ -17,7 +17,7 @@ const MetricCard = ({ title, value, subtext, trend, icon, variant = "light" }: M
   const isDark = variant === "dark";
   
   return (
-    <div className={`p-8 rounded-xl  transition-all border ${
+    <div className={`p-4 md:p-8 rounded-xl transition-all border ${
       isDark 
         ? "bg-slate-900 text-white border-slate-800 shadow-xl" 
         : "bg-white text-slate-900 border-slate-200"
@@ -37,7 +37,7 @@ const MetricCard = ({ title, value, subtext, trend, icon, variant = "light" }: M
       </div>
       
       <div className="space-y-1">
-        <h3 className="text-4xl font-bold tracking-tighter italic">{value}</h3>
+        <h3 className="text-2xl md:text-4xl font-bold tracking-tighter italic">{value}</h3>
         <p className={`text-xs font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
           {subtext}
         </p>
@@ -82,13 +82,13 @@ export default function AnalyticsSection() {
       <section className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 px-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">System Performance</h2>
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">System Performance</h2>
             <p className="text-slate-500 text-sm">Real-time health of your Banking, CRM, and CMS endpoints.</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="p-8 rounded-xl border border-slate-200 bg-white flex items-center justify-center">
+            <div key={i} className="p-4 md:p-8 rounded-xl border border-slate-200 bg-white flex items-center justify-center">
               <Loader2 className="animate-spin text-blue-600" size={24} />
             </div>
           ))}
@@ -105,7 +105,7 @@ export default function AnalyticsSection() {
     <section className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 px-2">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">System Performance</h2>
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900">System Performance</h2>
           <p className="text-slate-500 text-sm">Real-time health of your Banking, CRM, and CMS endpoints.</p>
         </div>
         <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">

@@ -73,3 +73,28 @@ export const updateTicketStatusSchema = z.object({
   status: z.enum(['open', 'in-progress', 'resolved', 'closed']),
 });
 
+// Admin: pricing plan create/update
+export const adminPlanSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  price: z.number().min(0),
+  features: z.array(z.string()),
+  apiCallLimit: z.number().int().min(-1), // -1 = unlimited
+  status: z.enum(['active', 'inactive']),
+  popular: z.boolean().optional().default(false),
+});
+
+// Admin: industry create/update
+export const adminIndustrySchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  slug: z.string().min(1).optional(), // derived from name if not provided
+  description: z.string().optional().default(''),
+  active: z.boolean().default(true),
+  order: z.number().int().min(0).default(0),
+});
+
+// Admin: revoke key body
+export const adminRevokeKeySchema = z.object({
+  reason: z.string().optional(),
+});
+

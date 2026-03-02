@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Facebook, Twitter, Linkedin, Github } from 'lucide-react'
 
 export default function Footer() {
@@ -10,12 +11,12 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
+            <Link href="/" className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B</span>
               </div>
               <span className="font-bold text-lg">BuildAPI</span>
-            </div>
+            </Link>
             <p className="text-gray-400 text-sm">
               Power your product with live interactions that keep users engaged.
             </p>
@@ -25,10 +26,18 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Product</h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li className="hover:text-white cursor-pointer transition">Features</li>
-              <li className="hover:text-white cursor-pointer transition">Pricing</li>
-              <li className="hover:text-white cursor-pointer transition">Security</li>
-              <li className="hover:text-white cursor-pointer transition">Roadmap</li>
+              <li>
+                <Link href="/features" className="hover:text-white transition">Features</Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
+              </li>
+              <li>
+                <Link href="/security" className="hover:text-white transition">Security</Link>
+              </li>
+              <li>
+                <Link href="/roadmap" className="hover:text-white transition">Roadmap</Link>
+              </li>
             </ul>
           </div>
 
@@ -36,10 +45,18 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Resources</h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li className="hover:text-white cursor-pointer transition">Documentation</li>
-              <li className="hover:text-white cursor-pointer transition">API Reference</li>
-              <li className="hover:text-white cursor-pointer transition">Blog</li>
-              <li className="hover:text-white cursor-pointer transition">Contact</li>
+              <li>
+                <Link href="/dashboard/docs" className="hover:text-white transition">Documentation</Link>
+              </li>
+              <li>
+                <Link href="/api-reference" className="hover:text-white transition">API Reference</Link>
+              </li>
+              <li>
+                <Link href="/blog" className="hover:text-white transition">Blog</Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-white transition">Contact</Link>
+              </li>
             </ul>
           </div>
 
@@ -47,10 +64,18 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li className="hover:text-white cursor-pointer transition">About</li>
-              <li className="hover:text-white cursor-pointer transition">Blog</li>
-              <li className="hover:text-white cursor-pointer transition">Careers</li>
-              <li className="hover:text-white cursor-pointer transition">Press</li>
+              <li>
+                <Link href="/about" className="hover:text-white transition">About</Link>
+              </li>
+              <li>
+                <Link href="/blog" className="hover:text-white transition">Blog</Link>
+              </li>
+              <li>
+                <Link href="/careers" className="hover:text-white transition">Careers</Link>
+              </li>
+              <li>
+                <Link href="/press" className="hover:text-white transition">Press</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -59,7 +84,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 py-8 flex flex-col md:flex-row items-center justify-between">
           {/* Left */}
           <div className="text-gray-400 text-sm mb-6 md:mb-0">
-            <p>&copy; 2024 BuildAPI. All rights reserved.</p>
+            <p>&copy; 2026 BuildAPI. All rights reserved.</p>
           </div>
 
           {/* Right - Social Links */}

@@ -84,5 +84,21 @@ export const api = {
 
   delete: <T>(endpoint: string, options?: RequestInit) =>
     apiRequest<T>(endpoint, { ...options, method: 'DELETE' }),
+
+  uploadAvatar: async (file: File): Promise<{ avatarUrl: string }> => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const token = getToken();
+    const headers: HeadersInit = {};
+    if (token) {
+      (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch('/api/users/me/avatar', {
+      method: 'POST',
+      body: formData,
+      headers,
+    });
+    return handleResponse<{ avatarUrl: string }>(response);
+  },
 };
 

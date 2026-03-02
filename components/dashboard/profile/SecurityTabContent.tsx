@@ -83,10 +83,10 @@ export default function SecurityTabContent({ is2faEnabled, setIs2faEnabled }: Se
   return (
     <div className="space-y-8">
       {/* Password Section */}
-      <div className="bg-white border border-slate-200 rounded-xl p-10">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="p-2 bg-blue-50 rounded-xl text-blue-600"><KeyRound size={20} /></div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Change Password</h2>
+      <div className="bg-white border border-slate-200 rounded-xl p-4 md:p-10">
+        <div className="flex items-center gap-3 mb-6 md:mb-8">
+          <div className="p-2 bg-blue-50 rounded-xl text-blue-600 shrink-0"><KeyRound size={20} /></div>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Change Password</h2>
         </div>
         <form onSubmit={handlePasswordChange} className="space-y-4 max-w-lg">
           <input 
@@ -106,7 +106,7 @@ export default function SecurityTabContent({ is2faEnabled, setIs2faEnabled }: Se
           <button 
             type="submit"
             disabled={changingPassword}
-            className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-200 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-200 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {changingPassword && <Loader2 className="animate-spin" size={16} />}
             Update Password
@@ -115,10 +115,10 @@ export default function SecurityTabContent({ is2faEnabled, setIs2faEnabled }: Se
       </div>
 
       {/* 2FA Implementation */}
-      <div className="bg-white border border-slate-200 rounded-xl p-10 overflow-hidden relative">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 md:p-10 overflow-hidden relative">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-green-50 rounded-xl text-green-600"><Smartphone size={20} /></div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Multi-Factor Authentication</h2>
+          <div className="p-2 bg-green-50 rounded-xl text-green-600 shrink-0"><Smartphone size={20} /></div>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Multi-Factor Authentication</h2>
         </div>
         <p className="text-slate-500 text-sm leading-relaxed mb-10 max-w-xl">
           Add an extra layer of security to your account by requiring a code from your mobile device. Essential for accounts managing **Banking APIs**.
@@ -135,7 +135,7 @@ export default function SecurityTabContent({ is2faEnabled, setIs2faEnabled }: Se
                  <button 
                    onClick={handleToggle2FA}
                    disabled={toggling2FA}
-                   className="px-6 py-4 bg-blue-600 text-white rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                   className="w-full sm:w-auto px-6 py-4 bg-blue-600 text-white rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                  >
                    {toggling2FA && <Loader2 className="animate-spin" size={16} />}
                    Enable 2FA
@@ -144,7 +144,7 @@ export default function SecurityTabContent({ is2faEnabled, setIs2faEnabled }: Se
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between bg-green-50 border border-green-100 rounded-2xl p-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-green-50 border border-green-100 rounded-2xl p-4 md:p-6">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="text-green-600" size={20} />
               <span className="font-bold text-emerald-800">2FA is currently active</span>

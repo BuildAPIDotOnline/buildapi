@@ -54,8 +54,8 @@ export default function DashboardPage() {
     <div className="max-w-7xl mx-auto space-y-10">
       
   <AnalyticsSection />
-<ApiKeyTable />
-   
+  <ApiKeyTable />
+
       {/* 3. SUPPORT FORM SECTION */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-[#F3F4F6] rounded-lg p-12">

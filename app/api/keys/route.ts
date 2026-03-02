@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     // Create API key document
     const apiKey = {
       userId: new ObjectId(user.userId),
-      key: fullKey, // Save full unhashed key
+      key: fullKey, // Store full unhashed key - never store hashedKey
       keyPrefix: prefix,
       name: validatedData.name,
       industry: validatedData.industry,

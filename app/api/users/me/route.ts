@@ -44,6 +44,9 @@ export async function GET(req: NextRequest) {
           twoFactorEnabled: userData.twoFactorEnabled,
           createdAt: userData.createdAt,
           lastLoginAt: userData.lastLoginAt,
+          avatarUrl: userData.avatarUrl || null,
+          isAdmin: !!userData.isAdmin,
+          accountStatus: userData.accountStatus || 'approved',
         },
       },
       { status: 200 }

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Key, Copy, RefreshCw, Trash2, ShieldCheck, 
-  ExternalLink, Search, Filter, Plus, Info,
-  CheckCircle2, AlertCircle, Loader2
+  Search, Filter, Plus, ChevronLeft, ChevronRight,
+  CheckCircle2, Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, ApiClientError } from '@/lib/api-client';
@@ -32,9 +32,13 @@ interface ApiKey {
   environment: 'production' | 'test';
 }
 
+const PAGE_SIZE = 10;
+
 export default function ApiKeysPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copyingId, setCopyingId] = useState<string | null>(null);
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -53,6 +57,10 @@ export default function ApiKeysPage() {
     fetchApiKeys();
     fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   const fetchInitialData = async () => {
     try {
@@ -102,6 +110,29 @@ export default function ApiKeysPage() {
       title: 'Copied',
       description: 'API key copied to clipboard',
     });
+  };
+
+  const handleCopyKey = async (keyId: string) => {
+    try {
+      setCopyingId(keyId);
+      const response = await api.get<{ key: string }>(`/api/keys/${keyId}/reveal`);
+      navigator.clipboard.writeText(response.key);
+      setCopiedId(keyId);
+      setTimeout(() => setCopiedId(null), 2000);
+      toast({
+        title: 'Copied',
+        description: 'API key copied to clipboard',
+      });
+    } catch (error) {
+      console.error('Error revealing API key:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof ApiClientError ? error.message : 'Failed to copy API key',
+        variant: 'destructive',
+      });
+    } finally {
+      setCopyingId(null);
+    }
   };
 
   const handleCreateKey = async () => {
@@ -204,6 +235,9 @@ export default function ApiKeysPage() {
     key.vertical.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.max(1, Math.ceil(filteredKeys.length / PAGE_SIZE));
+  const paginatedKeys = filteredKeys.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
@@ -233,12 +267,12 @@ export default function ApiKeysPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">Secret Keys</h1>
-            <p className="text-slate-500 font-medium">Manage production and test credentials for your services.</p>
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-slate-900">Secret Keys</h1>
+            <p className="text-slate-500 font-medium text-sm md:text-base">Manage production and test credentials for your services.</p>
           </div>
           <Button 
             onClick={() => setCreateDialogOpen(true)}
-            className="bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition shadow-xl shadow-blue-200 h-12"
+            className="w-full sm:w-auto bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition shadow-xl shadow-blue-200 h-12"
           >
             <Plus size={18} /> Create New Key
           </Button>
@@ -258,8 +292,8 @@ export default function ApiKeysPage() {
         </div>
 
         {/* Control Bar */}
-        <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
-          <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 px-4 py-2 rounded-xl flex-1 group">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 bg-white p-4 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 px-4 py-2 rounded-xl flex-1 min-w-0 group">
             <Search size={18} className="text-slate-400 group-focus-within:text-blue-600 transition" />
             <input 
               type="text" 
@@ -269,18 +303,90 @@ export default function ApiKeysPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="p-3 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition border border-slate-100">
+          <button className="p-3 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition border border-slate-100 shrink-0">
             <Filter size={18} />
           </button>
         </div>
 
         {/* Keys Table */}
-        <div className="bg-white border border-slate-200 py-8 rounded-xl overflow-hidden">
+        <div className="bg-white border border-slate-200 py-4 md:py-8 px-4 md:px-8 rounded-xl overflow-hidden">
           {filteredKeys.length === 0 ? (
-            <div className="p-12 text-center text-slate-500">
+            <div className="p-8 md:p-12 text-center text-slate-500">
               {apiKeys.length === 0 ? 'No API keys found. Create your first key to get started.' : 'No keys match your search.'}
             </div>
           ) : (
+            <>
+              {/* Mobile Card Layout */}
+              <div className="md:hidden space-y-3">
+                {paginatedKeys.map((k) => (
+                  <div
+                    key={k.id}
+                    className="bg-slate-50/50 rounded-xl p-4 border border-slate-100 space-y-3"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="font-bold text-slate-900 text-sm block">{k.name}</span>
+                        <span className="text-[10px] text-slate-400 font-medium">Created {k.created}</span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border shrink-0 ${
+                        k.vertical === 'Banking' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                        k.vertical === 'CRM' ? 'bg-purple-50 text-purple-600 border-purple-100' :
+                        k.vertical === 'E-commerce' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        'bg-amber-50 text-amber-600 border-amber-100'
+                      }`}>
+                        {k.vertical}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-[10px] font-bold">
+                        <span className="text-slate-500">{k.usage.toLocaleString()} / {k.limit === 999999999 ? '∞' : k.limit.toLocaleString()}</span>
+                        <span className={k.status === 'warning' ? 'text-amber-500' : 'text-slate-400'}>
+                          {k.limit === 999999999 ? '0' : Math.round((k.usage / k.limit) * 100)}%
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${k.limit === 999999999 ? 0 : (k.usage / k.limit) * 100}%` }}
+                          className={`h-full rounded-full ${k.status === 'warning' ? 'bg-amber-500' : 'bg-blue-600'}`}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-2 rounded-xl">
+                      <code className="text-xs font-mono text-slate-500 truncate flex-1 min-w-0">{k.key}</code>
+                      <button
+                        onClick={() => handleCopyKey(k.id)}
+                        disabled={copyingId === k.id}
+                        className="p-1.5 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition shrink-0 disabled:opacity-50"
+                      >
+                        {copyingId === k.id ? <Loader2 size={16} className="animate-spin" /> : copiedId === k.id ? <CheckCircle2 size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                      </button>
+                    </div>
+                    {k.status !== 'revoked' && (
+                      <div className="flex justify-end gap-2 pt-1">
+                        <button
+                          onClick={() => handleRotateKey(k.id)}
+                          disabled={rotatingId === k.id}
+                          className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition disabled:opacity-50"
+                          title="Rotate Key"
+                        >
+                          {rotatingId === k.id ? <Loader2 size={18} className="animate-spin" /> : <RefreshCw size={18} />}
+                        </button>
+                        <button
+                          onClick={() => handleRevokeKey(k.id)}
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition"
+                          title="Revoke Key"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table */}
+              <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-slate-50/50">
                 <tr>
@@ -292,7 +398,7 @@ export default function ApiKeysPage() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 <AnimatePresence>
-                  {filteredKeys.map((k) => (
+                  {paginatedKeys.map((k) => (
                     <motion.tr 
                       layout
                       key={k.id} 
@@ -335,10 +441,11 @@ export default function ApiKeysPage() {
                         <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-2 rounded-xl w-fit group-hover:bg-white transition">
                           <code className="text-xs font-mono text-slate-500">{k.key}</code>
                           <button 
-                            onClick={() => copyToClipboard(k.key, k.id)}
-                            className="p-1 text-slate-300 hover:text-blue-600 transition"
+                            onClick={() => handleCopyKey(k.id)}
+                            disabled={copyingId === k.id}
+                            className="p-1 text-slate-300 hover:text-blue-600 transition disabled:opacity-50"
                           >
-                            {copiedId === k.id ? <CheckCircle2 size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                            {copyingId === k.id ? <Loader2 size={16} className="animate-spin" /> : copiedId === k.id ? <CheckCircle2 size={16} className="text-emerald-500" /> : <Copy size={16} />}
                           </button>
                         </div>
                       </td>
@@ -370,12 +477,41 @@ export default function ApiKeysPage() {
                 </AnimatePresence>
               </tbody>
             </table>
+              </div>
+            </>
+          )}
+          {filteredKeys.length > PAGE_SIZE && (
+            <div className="flex justify-center items-center gap-2 sm:gap-4 border-t border-slate-100 pt-4 mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="gap-1 sm:gap-2"
+              >
+                <ChevronLeft size={16} />
+                <span className="hidden sm:inline">Previous</span>
+              </Button>
+              <span className="text-sm text-slate-600">
+                Page {page} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="gap-1 sm:gap-2"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight size={16} />
+              </Button>
+            </div>
           )}
         </div>
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-slate-900 rounded-xl p-10 text-white shadow-xl relative overflow-hidden group">
+          <div className="bg-slate-900 rounded-xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden group">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/20 blur-[80px] group-hover:bg-blue-600/30 transition" />
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2 italic">
@@ -390,7 +526,7 @@ export default function ApiKeysPage() {
             </div>
           </div>
 
-          <div className="bg-[#F3F4F6] rounded-xl p-10 border border-slate-200">
+          <div className="bg-[#F3F4F6] rounded-xl p-6 md:p-10 border border-slate-200">
             <h3 className="text-xl font-bold text-slate-900 mb-6">Environment Usage</h3>
             <div className="space-y-4">
               {[

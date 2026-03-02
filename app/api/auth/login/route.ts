@@ -38,6 +38,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Block users who haven't verified email
+    if (user.accountStatus === 'pending_verification') {
+      return NextResponse.json(
+        {
+          error: 'Please verify your email first. Check your inbox for the verification code.',
+          code: 'EMAIL_NOT_VERIFIED',
+        },
+        { status: 403 }
+      );
+    }
+
     // Update last login
     await usersCollection.updateOne(
       { _id: user._id },

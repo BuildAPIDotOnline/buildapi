@@ -16,7 +16,7 @@ export function generateApiKey(environment: 'production' | 'test' = 'production'
   // Full key format: ak_{env}_{64_chars}
   const fullKey = `${prefix}${randomBytes}`;
   
-  // Hash the full key for storage
+  // hashedKey is for verification only (e.g. future API-auth middleware). The DB key field stores fullKey (unhashed).
   const hashedKey = crypto.createHash('sha256').update(fullKey).digest('hex');
   
   // Create display prefix (first 8 chars of random part)

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
-import { Landmark, Users, ShoppingBag, Layout, X, ChevronRight, ChevronLeft, Loader2, CheckCircle2, AlertCircle, Zap, Rocket, Building2 } from 'lucide-react';
+import { Landmark, Users, ShoppingBag, Layout, X, ChevronRight, ChevronLeft, Loader2, CheckCircle2, AlertCircle, Zap, Rocket, Building2, Copy } from 'lucide-react';
 import { api, ApiClientError } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -446,7 +446,7 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-        <div className="bg-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl p-12 flex items-center justify-center">
+        <div className="bg-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl p-4 md:p-12 flex items-center justify-center">
           <Loader2 className="animate-spin text-blue-600" size={32} />
         </div>
       </div>
@@ -454,15 +454,15 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl relative">
-        <button onClick={onClose} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 overflow-y-auto">
+      <div className="bg-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl relative my-auto">
+        <button onClick={onClose} className="absolute top-4 right-4 md:top-8 md:right-8 text-slate-400 hover:text-slate-900 transition z-10">
           <X size={24} />
         </button>
 
-        <div className="p-12">
+        <div className="p-4 md:p-12">
           {/* Progress Indicator */}
-          <div className="flex gap-2 mb-10">
+          <div className="flex gap-2 mb-6 md:mb-10">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className={`h-1 flex-1 rounded-full ${step >= i ? "bg-blue-600" : "bg-slate-100"}`} />
             ))}
@@ -471,9 +471,9 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
           {/* STEP 1: Industry Selection */}
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-4">
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">Select Industry</h2>
-              <p className="text-slate-500 mb-8">Choose the vertical this API key will serve.</p>
-              <div className="grid grid-cols-2 gap-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Select Industry</h2>
+              <p className="text-slate-500 mb-6 md:mb-8">Choose the vertical this API key will serve.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {industries.map((ind) => {
                   const Icon = industryIconMap[ind.name] || Layout;
                   const colorClass = industryColorMap[ind.name] || 'text-slate-600 bg-slate-50 border-slate-100';
@@ -495,9 +495,9 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
           {/* STEP 2: Pricing Plan Selection */}
           {step === 2 && (
             <div className="animate-in fade-in slide-in-from-bottom-4">
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">Select Pricing Plan</h2>
-              <p className="text-slate-500 mb-8">Choose the plan that best fits your needs.</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Select Pricing Plan</h2>
+              <p className="text-slate-500 mb-6 md:mb-8">Choose the plan that best fits your needs.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 md:mb-8">
                 {pricingPlans.map((plan) => {
                   const Icon = iconMap[plan.name] || Zap;
                   const isSelected = formData.plan === plan.id;
@@ -536,17 +536,17 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
                   );
                 })}
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button 
                   onClick={() => setStep(1)}
-                  className="flex-1 bg-slate-100 text-slate-600 p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition"
+                  className="flex-1 w-full sm:w-auto bg-slate-100 text-slate-600 p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition"
                 >
                   <ChevronLeft size={18} /> Back
                 </button>
                 <button 
                   onClick={() => setStep(3)}
                   disabled={!formData.plan}
-                  className="flex-1 bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 w-full sm:w-auto bg-slate-900 text-white p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next <ChevronRight size={18} />
                 </button>
@@ -557,9 +557,9 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
           {/* STEP 3: Technical Details */}
           {step === 3 && (
             <div className="animate-in fade-in slide-in-from-bottom-4">
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">Technical Details</h2>
-              <p className="text-slate-500 mb-8">Provide the destination details for this key.</p>
-              <div className="space-y-4 mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Technical Details</h2>
+              <p className="text-slate-500 mb-6 md:mb-8">Provide the destination details for this key.</p>
+              <div className="space-y-4 mb-6 md:mb-8">
                 <input 
                   placeholder="App Name (e.g. My FinTech App)" 
                   className="w-full p-5 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-blue-600 transition"
@@ -583,17 +583,17 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
                   required
                 />
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button 
                   onClick={() => setStep(2)}
-                  className="flex-1 bg-slate-100 text-slate-600 p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition"
+                  className="flex-1 w-full sm:w-auto bg-slate-100 text-slate-600 p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition"
                 >
                   <ChevronLeft size={18} /> Back
                 </button>
                 <button 
                   onClick={() => setStep(4)}
                   disabled={!formData.name || !formData.url || !formData.email}
-                  className="flex-1 bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 w-full sm:w-auto bg-slate-900 text-white p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Review Order <ChevronRight size={18} />
                 </button>
@@ -604,8 +604,8 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
           {/* STEP 4: Overview */}
           {step === 4 && (
             <div className="animate-in fade-in slide-in-from-bottom-4">
-              <h2 className="text-3xl font-bold mb-2 tracking-tight">Review Order</h2>
-              <p className="text-slate-500 mb-8">Confirm your configuration before payment.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Review Order</h2>
+              <p className="text-slate-500 mb-6 md:mb-8">Confirm your configuration before payment.</p>
               
               {/* Payment Status Messages */}
               {paymentStatus === 'success' && (
@@ -627,18 +627,18 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
               )}
 
               {selectedPlan && (
-                <div className="bg-slate-50 rounded-3xl p-8 space-y-4 border border-slate-100 mb-8">
-                  <div className="flex justify-between"><span>Industry:</span><span className="font-bold">{formData.industry}</span></div>
-                  <div className="flex justify-between"><span>Pricing Plan:</span><span className="font-bold">{selectedPlan.name}</span></div>
-                  <div className="flex justify-between"><span>Application:</span><span className="font-bold">{formData.name}</span></div>
-                  <div className="flex justify-between"><span>Origin URL:</span><span className="font-bold">{formData.url}</span></div>
-                  <div className="flex justify-between"><span>Email:</span><span className="font-bold">{formData.email}</span></div>
-                  <div className="border-t border-slate-200 pt-4 flex justify-between text-lg">
-                    <span>Total Amount:</span><span className="font-bold text-blue-600">₦{selectedPlan.price.toLocaleString()}</span>
+                <div className="bg-slate-50 rounded-3xl p-4 md:p-8 space-y-4 border border-slate-100 mb-6 md:mb-8">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><span className="text-slate-500">Industry:</span><span className="font-bold">{formData.industry}</span></div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><span className="text-slate-500">Pricing Plan:</span><span className="font-bold">{selectedPlan.name}</span></div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><span className="text-slate-500">Application:</span><span className="font-bold break-all">{formData.name}</span></div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><span className="text-slate-500">Origin URL:</span><span className="font-bold break-all">{formData.url}</span></div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><span className="text-slate-500">Email:</span><span className="font-bold break-all">{formData.email}</span></div>
+                  <div className="border-t border-slate-200 pt-4 flex flex-col sm:flex-row sm:justify-between gap-1 text-base md:text-lg">
+                    <span className="text-slate-500">Total Amount:</span><span className="font-bold text-blue-600">₦{selectedPlan.price.toLocaleString()}</span>
                   </div>
                 </div>
               )}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button 
                   onClick={() => {
                     setStep(3);
@@ -646,14 +646,14 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
                     setPaymentMessage('');
                   }}
                   disabled={isProcessingPayment}
-                  className="flex-1 bg-slate-100 text-slate-600 p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 w-full sm:w-auto bg-slate-100 text-slate-600 p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft size={18} /> Back
                 </button>
                 <button 
                   onClick={handleProceedToPayment}
                   disabled={isProcessingPayment || paymentStatus === 'success' || !selectedPlan}
-                  className="flex-1 bg-blue-600 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl shadow-blue-200 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 w-full sm:w-auto bg-blue-600 text-white p-4 md:p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl shadow-blue-200 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isProcessingPayment ? (
                     <>
@@ -669,12 +669,41 @@ export default function PurchaseWizard({ isOpen, onClose }: { isOpen: boolean, o
 
           {/* STEP 5: Success Screen */}
           {step === 5 && paymentStatus === 'success' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 text-center py-12">
+            <div className="animate-in fade-in slide-in-from-bottom-4 text-center py-8 md:py-12">
               <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="text-emerald-600" size={48} />
               </div>
-              <h2 className="text-3xl font-bold mb-3 tracking-tight text-slate-900">Payment Successful!</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-3 tracking-tight text-slate-900">Payment Successful!</h2>
               <p className="text-slate-500 mb-8 text-lg">Your API key has been created and activated.</p>
+              
+              {generatedApiKey && (
+                <div className="mb-8 flex flex-col items-center gap-3">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Your API Key</p>
+                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-3 rounded-xl w-full max-w-md">
+                    <code className="text-sm font-mono text-slate-600 flex-1 truncate">
+                      {generatedApiKey.startsWith('ak_live_') 
+                        ? 'ak_live_****...****' 
+                        : generatedApiKey.startsWith('ak_test_') 
+                          ? 'ak_test_****...****' 
+                          : '****...****'}
+                    </code>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(generatedApiKey);
+                        toast({
+                          title: 'Copied',
+                          description: 'API key copied to clipboard',
+                        });
+                      }}
+                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition shrink-0"
+                      title="Copy full API key"
+                    >
+                      <Copy size={18} />
+                    </button>
+                  </div>
+                  <p className="text-xs text-slate-500">Copy your key now. You won&apos;t see it again on this screen.</p>
+                </div>
+              )}
               
               <button
                 onClick={() => {
