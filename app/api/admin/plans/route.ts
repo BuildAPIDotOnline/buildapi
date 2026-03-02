@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
   } catch (error: unknown) {
     if (error && typeof error === 'object' && 'name' in error && (error as { name: string }).name === 'ZodError') {
       return NextResponse.json(
-        { error: 'Validation error', details: (error as unknown as { errors: unknown }).errors },
+        { error: 'Validation error', details: (error as unknown as { issues: unknown }).issues },
         { status: 400 }
       );
     }
